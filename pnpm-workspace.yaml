@@ -1,6 +1,7 @@
 packages:
   - packages/*
   - playgrounds/*
+  - grindr
   - templates/*
 
 patchedDependencies:
