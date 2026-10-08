@@ -1,0 +1,248 @@
+          registry-url: https://registry.npmjs.org/
+          cache: "pnpm"
+      - run: pnpm install
+      - run: |
+          pnpm build:publish
+          npm publish --access public # new version is already set before the tag event
+        working-directory: ./packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  cr:
+    if: github.repository == 'stackblitz-labs/pkg.pr.new' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    concurrency:
+      group: continuous-releases
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: |
+          npm install -g corepack@latest
+          corepack enable
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 18
+          cache: "pnpm"
+      - run: pnpm install
+      - run: echo $API_URL ; pnpm build
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+
+      - run: pnpm tsx script/ci.ts
+        working-directory: ./packages/app
+        env:
+          NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: pnpm tsx script/update-webhook-url.ts
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: ./packages/app
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+          # NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          # NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: dummy big file
+        run: |
+          file_size=120  # 120 MB
+          file_path="dummy_random_content.txt"
+          file_size_in_bytes=$((file_size * 1024 * 1024))
+          head -c $file_size_in_bytes </dev/urandom >$file_path
+          echo "File $file_path created with random content of size $file_size MB."
+        working-directory: ./playgrounds/playground-b
+
+      - name: pkg.pr.new
+        run: pnpm publish:playgrounds
+          registry-url: https://registry.npmjs.org/
+          cache: "pnpm"
+      - run: pnpm install
+      - run: |
+          pnpm build:publish
+          npm publish --access public # new version is already set before the tag event
+        working-directory: ./packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  cr:
+    if: github.repository == 'stackblitz-labs/pkg.pr.new' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    concurrency:
+      group: continuous-releases
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: |
+          npm install -g corepack@latest
+          corepack enable
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 18
+          cache: "pnpm"
+      - run: pnpm install
+      - run: echo $API_URL ; pnpm build
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+
+      - run: pnpm tsx script/ci.ts
+        working-directory: ./packages/app
+        env:
+          NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: pnpm tsx script/update-webhook-url.ts
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: ./packages/app
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+          # NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          # NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: dummy big file
+        run: |
+          file_size=120  # 120 MB
+          file_path="dummy_random_content.txt"
+          file_size_in_bytes=$((file_size * 1024 * 1024))
+          head -c $file_size_in_bytes </dev/urandom >$file_path
+          echo "File $file_path created with random content of size $file_size MB."
+        working-directory: ./playgrounds/playground-b
+
+      - name: pkg.pr.new
+        run: pnpm publish:playgrounds
+          registry-url: https://registry.npmjs.org/
+          cache: "pnpm"
+      - run: pnpm install
+      - run: |
+          pnpm build:publish
+          npm publish --access public # new version is already set before the tag event
+        working-directory: ./packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  cr:
+    if: github.repository == 'stackblitz-labs/pkg.pr.new' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    concurrency:
+      group: continuous-releases
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: |
+          npm install -g corepack@latest
+          corepack enable
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 18
+          cache: "pnpm"
+      - run: pnpm install
+      - run: echo $API_URL ; pnpm build
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+
+      - run: pnpm tsx script/ci.ts
+        working-directory: ./packages/app
+        env:
+          NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: pnpm tsx script/update-webhook-url.ts
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: ./packages/app
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+          # NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          # NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: dummy big file
+        run: |
+          file_size=120  # 120 MB
+          file_path="dummy_random_content.txt"
+          file_size_in_bytes=$((file_size * 1024 * 1024))
+          head -c $file_size_in_bytes </dev/urandom >$file_path
+          echo "File $file_path created with random content of size $file_size MB."
+        working-directory: ./playgrounds/playground-b
+
+      - name: pkg.pr.new
+        run: pnpm publish:playgrounds
+          registry-url: https://registry.npmjs.org/
+          cache: "pnpm"
+      - run: pnpm install
+      - run: |
+          pnpm build:publish
+          npm publish --access public # new version is already set before the tag event
+        working-directory: ./packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  cr:
+    if: github.repository == 'stackblitz-labs/pkg.pr.new' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    concurrency:
+      group: continuous-releases
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: |
+          npm install -g corepack@latest
+          corepack enable
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 18
+          cache: "pnpm"
+      - run: pnpm install
+      - run: echo $API_URL ; pnpm build
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+
+      - run: pnpm tsx script/ci.ts
+        working-directory: ./packages/app
+        env:
+          NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: pnpm tsx script/update-webhook-url.ts
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: ./packages/app
+        env:
+          API_URL: ${{ needs.deploy.outputs.deployment-url }}
+          # NITRO_WEBHOOK_SECRET: ${{ secrets.NITRO_WEBHOOK_SECRET }}
+          NITRO_APP_ID: ${{ secrets.NITRO_APP_ID }}
+          NITRO_PRIVATE_KEY: ${{ secrets.NITRO_PRIVATE_KEY }}
+          # NITRO_RM_STALE_KEY: ${{ secrets.NITRO_RM_STALE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: dummy big file
+        run: |
+          file_size=120  # 120 MB
+          file_path="dummy_random_content.txt"
+          file_size_in_bytes=$((file_size * 1024 * 1024))
+          head -c $file_size_in_bytes </dev/urandom >$file_path
+          echo "File $file_path created with random content of size $file_size MB."
+        working-directory: ./playgrounds/playground-b
+
+      - name: pkg.pr.new
+        run: pnpm publish:playgrounds
