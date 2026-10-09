@@ -20,7 +20,7 @@ export default eventHandler(async (event) => {
     throw createError({
       statusCode: 401,
       message:
-        "Try doing multipart uploads from a github workflow! Also make sure you install https://github.com/apps/pkg-pr-new GitHub app on the repo",
+        "Try doing multipart uploads from a github workflow! Also make sure you install https://github.com/apps/http GitHub app on the repo",
     });
   }
   const workflowData = (await workflowsBucket.getItem(workflowKey))!;

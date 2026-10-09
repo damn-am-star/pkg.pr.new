@@ -65,7 +65,7 @@ Show that your project uses pkg.pr.new by adding a badge to your README:
 
 ### Install the GitHub App
 
-First [install the GitHub Application](https://github.com/apps/pkg-pr-new).
+First [install the GitHub Application](https://github.com/apps/http).
 
 > [!IMPORTANT]
 > Make sure it's installed on the repository before trying to publish a package. To read about the permissions the app needs, check [#305](https://github.com/stackblitz-labs/pkg.pr.new/issues/305).
