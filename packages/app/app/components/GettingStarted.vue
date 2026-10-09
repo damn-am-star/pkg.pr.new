@@ -7,7 +7,7 @@
 
       <template #actions>
         <UButton
-          href="https://github.com/apps/pkg-pr-new"
+          href="https://github.com/apps/http"
           target="_blank"
           icon="mdi-github"
           trailing-icon="ph-arrow-square-out"

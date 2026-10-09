@@ -38,7 +38,7 @@ export default eventHandler(async (event) => {
       throw createError({
         statusCode: 404,
         fatal: true,
-        message: `The app https://github.com/apps/pkg-pr-new is not installed on or does not have access to ${owner}/${repo}.`,
+        message: `The app https://github.com/apps/http is not installed on or does not have access to ${owner}/${repo}.`,
       });
     }
 
